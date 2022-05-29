@@ -21,7 +21,7 @@ class DATA{
         paginaActual = 1;
         DATA.consultarApi()
     }
-
+    //Consulta los datos de la api
     static async consultarApi(){
         const valor = document.querySelector('#termino').value.trim()
 
@@ -31,14 +31,14 @@ class DATA{
         try {
             const respuesta = await fetch(url);
             const resultado = await respuesta.json()
-            
+            //se calcula las paginas para el paginador en base a la cantidad de resultados
             totalPaginas = DATA.calcularPaginas(resultado.totalHits);
             UI.mostrarImagen(resultado.hits)
         } catch (error) {
             UI.mostrarError('Error al consultar la api')
         }
     }
-
+    
     static calcularPaginas(total){
         return Math.ceil(total / registroPorPag)
     }
