@@ -20,7 +20,7 @@ class DATA{
         paginaActual = 1;
         DATA.consultarApi()
     }
-
+    //Consulta los datos de la api
     static async consultarApi(){
         //muestra spinner
         UI.mostrarSpinner()
@@ -33,18 +33,22 @@ class DATA{
         try {
             const respuesta = await fetch(url);
             const resultado = await respuesta.json()
+<<<<<<< HEAD
             
             if(resultado.hits.length < 1) {
                 return UI.mostrarError('No se han encontrado fotos')
             }
 
+=======
+            //se calcula las paginas para el paginador en base a la cantidad de resultados
+>>>>>>> e89bf8a52193d4e28ec81e38a8dd06afd6ed1590
             totalPaginas = DATA.calcularPaginas(resultado.totalHits);
             UI.mostrarImagen(resultado.hits)
         } catch (error) {
             UI.mostrarError('Error al consultar la api')
         }
     }
-
+    
     static calcularPaginas(total){
         return Math.ceil(total / registroPorPag)
     }
