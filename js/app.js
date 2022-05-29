@@ -22,18 +22,21 @@ class DATA{
         DATA.consultarApi()
     }
 
-    static consultarApi(){
+    static async consultarApi(){
         const valor = document.querySelector('#termino').value.trim()
 
         const apiKey = '27500608-828d1eb74aa8be21c5e124841';
         const url = `https://pixabay.com/api/?key=${apiKey}&q=${valor}&per_page=${registroPorPag}&page=${paginaActual}`
-        fetch(url)
-            .then(response=>response.json())
-            .then(json=>{
-                //se calcula las paginas para el paginador en base a la cantidad de resultados
-                totalPaginas = DATA.calcularPaginas(json.totalHits);
-                UI.mostrarImagen(json.hits)
-            })
+        
+        try {
+            const respuesta = await fetch(url);
+            const resultado = await respuesta.json()
+            
+            totalPaginas = DATA.calcularPaginas(resultado.totalHits);
+            UI.mostrarImagen(resultado.hits)
+        } catch (error) {
+            UI.mostrarError('Error al consultar la api')
+        }
     }
 
     static calcularPaginas(total){
