@@ -33,15 +33,12 @@ class DATA{
         try {
             const respuesta = await fetch(url);
             const resultado = await respuesta.json()
-<<<<<<< HEAD
             
             if(resultado.hits.length < 1) {
                 return UI.mostrarError('No se han encontrado fotos')
             }
 
-=======
             //se calcula las paginas para el paginador en base a la cantidad de resultados
->>>>>>> e89bf8a52193d4e28ec81e38a8dd06afd6ed1590
             totalPaginas = DATA.calcularPaginas(resultado.totalHits);
             UI.mostrarImagen(resultado.hits)
         } catch (error) {
