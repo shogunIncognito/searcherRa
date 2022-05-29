@@ -12,8 +12,7 @@ class DATA{
     static validarDatos(e) {
         e.preventDefault()
         const valor = document.querySelector('#termino').value.trim()
-        //muestra spinner
-        UI.mostrarSpinner()
+
         if(valor == ''){
             return UI.mostrarError('¡Hay campos vacios!')
         }
@@ -23,6 +22,9 @@ class DATA{
     }
 
     static async consultarApi(){
+        //muestra spinner
+        UI.mostrarSpinner()
+
         const valor = document.querySelector('#termino').value.trim()
 
         const apiKey = '27500608-828d1eb74aa8be21c5e124841';
@@ -32,6 +34,10 @@ class DATA{
             const respuesta = await fetch(url);
             const resultado = await respuesta.json()
             
+            if(resultado.hits.length < 1) {
+                return UI.mostrarError('No se han encontrado fotos')
+            }
+
             totalPaginas = DATA.calcularPaginas(resultado.totalHits);
             UI.mostrarImagen(resultado.hits)
         } catch (error) {
@@ -52,15 +58,19 @@ class DATA{
 
 class UI{
     static mostrarError(mensaje){
+
         const existAlerta = document.querySelector('.bg-red-100');
+
         //Elimina los elementos que hayan en la caja de resultado
         while(result.firstChild){
             result.removeChild(result.firstChild)
         }
+
         //Elimina el paginador
         while(paginacionDiv.firstChild){
             paginacionDiv.removeChild(paginacionDiv.firstChild)
         }
+
         //Comprueba si ya existe una alerta
         if(!existAlerta){
             const alerta = document.createElement('p');
@@ -124,16 +134,20 @@ class UI{
             if(done) return;
 
             //en caso contrario
-            const boton = document.createElement('a');
-            boton.href = '#';
+            const boton = document.createElement('button');
             boton.dataset.pagina = value;
             boton.textContent = value;
             boton.className = 'siguiente mx-auto bg-yellow-400 px-4 py-1 mr-2 font-bold mb-4 rounded'
 
+            if(boton.textContent == paginaActual) {
+                boton.disabled = true;
+                boton.classList.remove('bg-yellow-400');
+                boton.classList.add('bg-yellow-600');
+            }
+
             //cambia de pagina al igual que los resultados
             boton.onclick = () =>{
                 paginaActual = value;
-
                 DATA.consultarApi()
             }
 
